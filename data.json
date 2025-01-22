@@ -31,14 +31,14 @@
     {
         "title": "CRM Database System",
         "description": "Purpose: Educational<br>Description: Developed a database management system to streamline administrative tasks, including tracking employee work hours, generating detailed reports, equipment assignment tracking, payroll processing, and customizable employee productivity reports. <br> Environment: JAVA, JavaScript, SQL",
-        "imageUrl": "/Images/CRM_Img.jpg?height=200&width=300",
+        "imageUrl": "Images/CRM_Img.jpg?height=200&width=300",
         "websiteUrl": "#",
         "viewMoreUrl": "#"
     },
     {
         "title": "Analysis and Auditing for Analyze S.A",
         "description": "Purpose: Educational<br>Description: Conducted company data analysis to identify the root causes of customer reduction. Proposed strategies for enhancing customer acquisition and improving sales processes. Key efforts included expanding the sales team, implementing training programs, and developing a post-sales follow-up system to boost customer retention and optimize the sales process.<br>Environment: Vensim",
-        "imageUrl": "/Images/Analyze_Img.jpg?height=200&width=300",
+        "imageUrl": "Images/Analyze_Img.jpg?height=200&width=300",
         "websiteUrl": "#",
         "viewMoreUrl": "#"
     }
