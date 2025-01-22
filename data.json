@@ -1,0 +1,47 @@
+{
+    "academyAndKnowledge": [
+      {
+        "title": "Systems Engineering",
+        "content": "Undergraduate at El Bosque University, sixth-semester student"
+      },
+      {
+        "title": "Oracle ONE, Alura LATAM",
+        "content": "Back-end Bootcamp (February 2024 - Present)."
+      },
+      {
+        "title": "Google Activate",
+        "content": "Completed Web Development I certification in 2020."
+      }
+    ],
+    "workExperience": [
+      {
+        "title": "Tech Support Engineer",
+        "content": "Rockwell Automation (February 2024 - Present). \n Responsibilities: Bring Support to Software for end-users remotely."
+      },
+      {
+        "title": "Social Media Manager",
+        "content": "Teleperformance Colombia (July 2021 - September 2021). \n Responsibilities: Managed social media and supported local businesses with websites."
+      },
+      {
+        "title": "Secretary",
+        "content": "Bicicletas Olaya (November 2019 - March 2020). \n Responsibilities: Handled administrative tasks and customer support."
+      }
+    ],
+    "projects": [
+    {
+        "title": "CRM Database System",
+        "description": "Purpose: Educational<br>Description: Developed a database management system to streamline administrative tasks, including tracking employee work hours, generating detailed reports, equipment assignment tracking, payroll processing, and customizable employee productivity reports. <br> Environment: JAVA, JavaScript, SQL",
+        "imageUrl": "/Images/CRM_Img.jpg?height=200&width=300",
+        "websiteUrl": "#",
+        "viewMoreUrl": "#"
+    },
+    {
+        "title": "Analysis and Auditing for Analyze S.A",
+        "description": "Purpose: Educational<br>Description: Conducted company data analysis to identify the root causes of customer reduction. Proposed strategies for enhancing customer acquisition and improving sales processes. Key efforts included expanding the sales team, implementing training programs, and developing a post-sales follow-up system to boost customer retention and optimize the sales process.<br>Environment: Vensim",
+        "imageUrl": "/Images/Analyze_Img.jpg?height=200&width=300",
+        "websiteUrl": "#",
+        "viewMoreUrl": "#"
+    }
+    ]
+  }
+  
