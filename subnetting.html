@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP Subnet Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 4px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px;
+            width: 100%;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #resultado {
+            margin-top: 20px;
+            background: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 6px;
+            text-align: center;
+        }
+        th {
+            background: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>IP Subnet Calculator</h1>
+    <div class="container">
+        <label>IP Base:</label>
+        <input type="text" id="ip" placeholder="Ej: 192.168.1.0">
+
+        <label>Máscara (CIDR):</label>
+        <input type="number" id="mask" min="1" max="30" placeholder="Ej: 24">
+
+        <label>Subredes deseadas:</label>
+        <input type="number" id="subnets" min="1">
+
+        <button onclick="calcular()">Calcular</button>
+
+        <div id="resultado"></div>
+    </div>
+
+    <script>
+        function calcular() {
+            const ip = document.getElementById("ip").value;
+            let mask = parseInt(document.getElementById("mask").value);
+            const subnets = parseInt(document.getElementById("subnets").value);
+
+            if (!ip || isNaN(mask) || isNaN(subnets)) {
+                document.getElementById("resultado").innerHTML = "<p style='color:red;'>Por favor, ingresa todos los valores.</p>";
+                return;
+            }
+
+            let n = Math.ceil(Math.log2(subnets));
+            let nuevaMask = mask + n;
+            let totalHosts = Math.pow(2, 32 - nuevaMask);
+            let hostsUtiles = totalHosts - 2;
+
+            let incremento = Math.pow(2, 8 - (nuevaMask % 8));
+
+            let [a, b, c, d] = ip.split(".").map(Number);
+            let resultadoHTML = `<p><strong>Nueva máscara:</strong> /${nuevaMask}</p>`;
+            resultadoHTML += `<p><strong>Hosts por subred:</strong> ${hostsUtiles}</p>`;
+            resultadoHTML += `<p><strong>Incremento:</strong> ${incremento}</p>`;
+            resultadoHTML += `<table>
+                <tr>
+                    <th>Red</th>
+                    <th>Primer Host</th>
+                    <th>Último Host</th>
+                    <th>Broadcast</th>
+                </tr>`;
+
+            for (let i = 0; i < subnets; i++) {
+                let inicio = i * incremento;
+                let red = `${a}.${b}.${c}.${inicio}`;
+                let primerHost = `${a}.${b}.${c}.${inicio + 1}`;
+                let ultimoHost = `${a}.${b}.${c}.${inicio + incremento - 2}`;
+                let broadcast = `${a}.${b}.${c}.${inicio + incremento - 1}`;
+
+                resultadoHTML += `
+                    <tr>
+                        <td>${red}</td>
+                        <td>${primerHost}</td>
+                        <td>${ultimoHost}</td>
+                        <td>${broadcast}</td>
+                    </tr>`;
+            }
+            resultadoHTML += `</table>`;
+
+            document.getElementById("resultado").innerHTML = resultadoHTML;
+        }
+    </script>
+</body>
+</html>
