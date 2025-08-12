@@ -3,140 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IP Subnet Calculator</title>
+    <title>Subnetting Tool</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Usa tu mismo CSS principal -->
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f7f7f7;
-            margin: 0;
-            padding: 20px;
+        /* Layout para formulario y resultados */
+        .calc-container {
+            display: flex;
+            gap: 30px;
+            margin-top: 40px;
         }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: white;
+        .calc-form, .calc-results {
+            flex: 1;
+            background-color: var(--secondary-color);
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
         }
         label {
             display: block;
-            margin-top: 10px;
+            margin-top: 15px;
             font-weight: bold;
+            color: var(--text-white);
         }
-        input {
+        input, select {
             width: 100%;
             padding: 8px;
-            margin-top: 4px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        button {
-            margin-top: 15px;
-            padding: 10px;
-            width: 100%;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #0056b3;
-        }
-        #resultado {
-            margin-top: 20px;
-            background: #f1f1f1;
-            padding: 10px;
+            margin-top: 5px;
+            background-color: var(--bg-color-dark);
+            color: var(--text-white);
+            border: 1px solid var(--border-color);
             border-radius: 5px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            margin-top: 15px;
         }
         th, td {
-            border: 1px solid #ccc;
+            border: 1px solid var(--border-color);
             padding: 6px;
             text-align: center;
         }
         th {
-            background: #007bff;
-            color: white;
+            background: var(--primary-color);
+            color: var(--text-white);
+        }
+        /* Switch IPv4/IPv6 */
+        .switch-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        .switch input { display: none; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            background-color: var(--border-color);
+            border-radius: 34px;
+            top: 0; left: 0;
+            right: 0; bottom: 0;
+            transition: .4s;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            border-radius: 50%;
+            transition: .4s;
+        }
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
         }
     </style>
 </head>
 <body>
-    <h1>IP Subnet Calculator</h1>
+
+<header>
     <div class="container">
-        <label>IP Base:</label>
-        <input type="text" id="ip" placeholder="Ej: 192.168.1.0">
-
-        <label>Máscara (CIDR):</label>
-        <input type="number" id="mask" min="1" max="30" placeholder="Ej: 24">
-
-        <label>Subredes deseadas:</label>
-        <input type="number" id="subnets" min="1">
-
-        <button onclick="calcular()">Calcular</button>
-
-        <div id="resultado"></div>
+        <h1 class="intro">Subnetting <span class="highlight">Tool</span></h1>
+        <p class="description">Calculadora de subredes para IPv4 e IPv6</p>
     </div>
+</header>
 
-    <script>
-        function calcular() {
-            const ip = document.getElementById("ip").value;
-            let mask = parseInt(document.getElementById("mask").value);
-            const subnets = parseInt(document.getElementById("subnets").value);
+<section class="container">
+    <div class="calc-container">
+        
+        <!-- Formulario -->
+        <div class="calc-form">
+            <div class="switch-container">
+                <span>IPv4</span>
+                <label class="switch">
+                    <input type="checkbox" id="ipVersionSwitch">
+                    <span class="slider"></span>
+                </label>
+                <span>IPv6 (coming soon)</span>
+            </div>
 
-            if (!ip || isNaN(mask) || isNaN(subnets)) {
-                document.getElementById("resultado").innerHTML = "<p style='color:red;'>Por favor, ingresa todos los valores.</p>";
-                return;
-            }
+            <label>IP Base:</label>
+            <input type="text" id="ip" placeholder="Ej: 192.168.1.0">
 
-            let n = Math.ceil(Math.log2(subnets));
-            let nuevaMask = mask + n;
-            let totalHosts = Math.pow(2, 32 - nuevaMask);
-            let hostsUtiles = totalHosts - 2;
+            <label>Máscara (CIDR):</label>
+            <input type="number" id="mask" min="1" max="30" placeholder="Ej: 24">
 
-            let incremento = Math.pow(2, 8 - (nuevaMask % 8));
+            <label>Subredes deseadas:</label>
+            <input type="number" id="subnets" min="1">
 
-            let [a, b, c, d] = ip.split(".").map(Number);
-            let resultadoHTML = `<p><strong>Nueva máscara:</strong> /${nuevaMask}</p>`;
-            resultadoHTML += `<p><strong>Hosts por subred:</strong> ${hostsUtiles}</p>`;
-            resultadoHTML += `<p><strong>Incremento:</strong> ${incremento}</p>`;
-            resultadoHTML += `<table>
-                <tr>
-                    <th>Red</th>
-                    <th>Primer Host</th>
-                    <th>Último Host</th>
-                    <th>Broadcast</th>
-                </tr>`;
+            <button onclick="calcular()">Calcular</button>
+        </div>
 
-            for (let i = 0; i < subnets; i++) {
-                let inicio = i * incremento;
-                let red = `${a}.${b}.${c}.${inicio}`;
-                let primerHost = `${a}.${b}.${c}.${inicio + 1}`;
-                let ultimoHost = `${a}.${b}.${c}.${inicio + incremento - 2}`;
-                let broadcast = `${a}.${b}.${c}.${inicio + incremento - 1}`;
+        <!-- Resultados -->
+        <div class="calc-results" id="resultado">
+            <p>Los resultados aparecerán aquí...</p>
+        </div>
 
-                resultadoHTML += `
-                    <tr>
-                        <td>${red}</td>
-                        <td>${primerHost}</td>
-                        <td>${ultimoHost}</td>
-                        <td>${broadcast}</td>
-                    </tr>`;
-            }
-            resultadoHTML += `</table>`;
+    </div>
+</section>
 
-            document.getElementById("resultado").innerHTML = resultadoHTML;
+<footer>
+    <p>&copy; 2025 - Subnetting Tool</p>
+</footer>
+
+<script>
+    const switchIPv6 = document.getElementById("ipVersionSwitch");
+
+    function calcular() {
+        let isIPv6 = switchIPv6.checked;
+
+        if (isIPv6) {
+            document.getElementById("resultado").innerHTML = 
+                "<p style='color:var(--primary-color); font-weight:bold;'>El cálculo para IPv6 aún no está implementado.</p>";
+            return;
         }
-    </script>
+
+        const ip = document.getElementById("ip").value;
+        let mask = parseInt(document.getElementById("mask").value);
+        const subnets = parseInt(document.getElementById("subnets").value);
+
+        if (!ip || isNaN(mask) || isNaN(subnets)) {
+            document.getElementById("resultado").innerHTML = 
+                "<p style='color:red;'>Por favor, ingresa todos los valores.</p>";
+            return;
+        }
+
+        let n = Math.ceil(Math.log2(subnets));
+        let nuevaMask = mask + n;
+        let totalHosts = Math.pow(2, 32 - nuevaMask);
+        let hostsUtiles = totalHosts - 2;
+        let incremento = Math.pow(2, 8 - (nuevaMask % 8));
+
+        let [a, b, c, d] = ip.split(".").map(Number);
+        let resultadoHTML = `<p><strong>Nueva máscara:</strong> /${nuevaMask}</p>`;
+        resultadoHTML += `<p><strong>Hosts por subred:</strong> ${hostsUtiles}</p>`;
+        resultadoHTML += `<table>
+            <tr>
+                <th>Red</th>
+                <th>Primer Host</th>
+                <th>Último Host</th>
+                <th>Broadcast</th>
+            </tr>`;
+
+        for (let i = 0; i < subnets; i++) {
+            let inicio = i * incremento;
+            let red = `${a}.${b}.${c}.${inicio}`;
+            let primerHost = `${a}.${b}.${c}.${inicio + 1}`;
+            let ultimoHost = `${a}.${b}.${c}.${inicio + incremento - 2}`;
+            let broadcast = `${a}.${b}.${c}.${inicio + incremento - 1}`;
+
+            resultadoHTML += `
+                <tr>
+                    <td>${red}</td>
+                    <td>${primerHost}</td>
+                    <td>${ultimoHost}</td>
+                    <td>${broadcast}</td>
+                </tr>`;
+        }
+        resultadoHTML += `</table>`;
+
+        document.getElementById("resultado").innerHTML = resultadoHTML;
+    }
+</script>
+
 </body>
 </html>
