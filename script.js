@@ -70,7 +70,9 @@ function populateProjects(projects) {
                 <h3>${project.title}</h3>
                 <p>${project.description}</p>
                 <div class="button-group">
-                    
+                    ${project.calculatorUrl ? `<button onclick="window.location.href='${project.calculatorUrl}'">Go to Calculator</button>` : ''}
+                    ${project.viewMoreUrl ? `<button onclick="window.location.href='${project.viewMoreUrl}'">View More</button>` : ''}
+                    ${project.websiteUrl ? `<button onclick="window.location.href='${project.websiteUrl}'">Go to Website</button>` : ''}
                 </div>
             </div>
         `;
@@ -79,4 +81,5 @@ function populateProjects(projects) {
 }
 
 {/* <button onclick="window.location.href='${project.viewMoreUrl}'">View More</button> */}
+
 {/* <button onclick="window.location.href='${project.websiteUrl}'">Go to the website</button> */}
